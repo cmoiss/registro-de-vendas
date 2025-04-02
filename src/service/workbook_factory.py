@@ -15,6 +15,10 @@ class WorkBookFactory:
         sheet_produtos = book["Produtos"]
         sheet_produtos.append(["Nome do Produto", "Valor"])
         
+        # Produtos iniciais
+        sheet_produtos.append(["Camisa Gucci 30.1 Elastano", "60.0"])
+        sheet_produtos.append(["Conjunto Dry Fit Nike", "80.0"])
+        
     def _generate_template_workbook(self):
         book = Workbook()
         self._gerar_sheet_vendas(book)
