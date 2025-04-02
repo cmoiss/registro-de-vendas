@@ -7,19 +7,23 @@ class SheetHandler:
     def __init__(self):
         self.nome_planilha = WorkBookFactory().workboook_name
     
-    def registrar_venda(venda: Venda):
+    def registrar_venda(self, venda: Venda):
         factoy = WorkBookFactory()
         book = factoy.load_book()
 
-        sheet_produtos = book["Produtos"]
+        sheet_produtos = book["Vendas"]
         sheet_produtos.append([
-            venda.produto.to_list(), 
+            venda.produto.nome,
+            venda.produto.preco,
             venda.cliente.name, 
-            venda.data_hora_venda,
-            venda.vendedor
+            None,
+            None,
+            None,
+            # venda.data_hora_venda,
+            venda.vendedor.vendedor
         ])
         
-        book.save()
+        book.save(self.nome_planilha)
     
     def load_products(self):
         # 1. Carregar a planilha

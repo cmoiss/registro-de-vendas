@@ -1,6 +1,8 @@
 from model.produto import Produto
 from model.cliente import Cliente
 from model.venda import Venda
+from model.vendedor import Vendedor
+from service.sheet_handler import SheetHandler
 
 class VendaController:
     def __init__(self, view, sheet_handler):
@@ -58,8 +60,11 @@ class VendaController:
         
         # Aqui você pode adicionar a lógica para salvar no banco de dados
         # Por exemplo:
-        # venda = Venda(...)
-        # self.sheet_handler.save_venda(venda)
+        produto = Produto(form_data["produto"], form_data["valor"])
+        cliente = Cliente(form_data["cliente"])
+        vendedor = Vendedor(form_data["vendedor"])
+        venda = Venda(produto=produto, cliente=cliente, forma_pagamento=None, vendedor=vendedor)
+        self.sheet_handler.registrar_venda(venda)
         
         # Mostra mensagem de sucesso e limpa o formulário
         self.view.show_success_message(mensagem)
