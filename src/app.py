@@ -1,9 +1,29 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from model.produto import Produto
+from model.cliente import Cliente
+from model.venda import Venda
+from service.sheet_handler import SheetHandler
+
+# Função que será chamada quando o produto for selecionado
+def on_produto_selected(event):
+    nome_selecionado = combobox_produtos.get()
+    print(f"Produto selecionado: {nome_selecionado}")
+    
+    # Procura o produto correspondente na lista
+    produto_selecionado = next(
+        (produto for produto in produtos_list if produto.nome == nome_selecionado),
+        None
+    )
+    
+    # Se encontrou, atualiza o Entry com o preço
+    if produto_selecionado:
+        entry_valor.delete(0, ctk.END)  # Limpa o campo
+        entry_valor.insert(0, str(produto_selecionado.preco))  # Insere o preço
 
 def cadastrar_venda():
     # Obtém os valores dos campos
-    produto = entry_produto.get()
+    produto = combobox_produtos.get()
     cliente = entry_cliente.get()
     valor = entry_valor.get()
     pagamento = combobox_formas_pagamento.get()
@@ -25,7 +45,7 @@ def cadastrar_venda():
     messagebox.showinfo("Venda Cadastrada", mensagem)
 
     # Limpa os campos após o cadastro
-    entry_produto.delete(0, "end")
+    combobox_produtos.set("Selecione o produto")
     entry_cliente.delete(0, "end")
     entry_valor.delete(0, "end")
     combobox_formas_pagamento.set("Selecione a forma de pagamento")
@@ -47,9 +67,22 @@ frame.pack(pady=20, padx=20, fill="both", expand=True)
 label_titulo = ctk.CTkLabel(frame, text="Cadastro de Venda", font=("Arial", 18, "bold"))
 label_titulo.pack(pady=10)
 
+# Carrega a lista de produtos
+produtos_list = SheetHandler().load_products()
+print(produtos_list)
+produtos_names = [produto.nome for produto in produtos_list] 
+
 # Campos do formulário
-entry_produto = ctk.CTkEntry(frame, placeholder_text="Nome do Produto")
-entry_produto.pack(pady=5, padx=10, fill="x")
+combobox_produtos = ctk.CTkComboBox(
+    frame, 
+    values=produtos_names, 
+    state="readonly",
+    command=on_produto_selected
+)
+combobox_produtos.set("Selecione o produto")
+combobox_produtos.pack(pady=5, padx=10, fill="x")
+# Vincula o evento de seleção à função de preenchimento automático
+# combobox_produtos.bind("<<ComboboxSelected>>", on_produto_selected)
 
 entry_cliente = ctk.CTkEntry(frame, placeholder_text="Nome do Cliente")
 entry_cliente.pack(pady=5, padx=10, fill="x")
