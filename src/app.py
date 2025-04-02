@@ -1,13 +1,17 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from service.sheet_handler import SheetHandler
 
 def cadastrar_venda():
     # Obtém os valores dos campos
-    produto = entry_produto.get()
+    produto = combobox_produtos.get()
     cliente = entry_cliente.get()
     valor = entry_valor.get()
     pagamento = combobox_formas_pagamento.get()
     vendedor = combobox_vendedor.get()
+
+    # produto = Produto(produto)
+    # venda = Venda()
 
     # Validação básica
     if not produto or not cliente or not valor or not pagamento or not vendedor:
@@ -25,7 +29,7 @@ def cadastrar_venda():
     messagebox.showinfo("Venda Cadastrada", mensagem)
 
     # Limpa os campos após o cadastro
-    entry_produto.delete(0, "end")
+    combobox_produtos.set("Selecione o produto")
     entry_cliente.delete(0, "end")
     entry_valor.delete(0, "end")
     combobox_formas_pagamento.set("Selecione a forma de pagamento")
@@ -48,8 +52,12 @@ label_titulo = ctk.CTkLabel(frame, text="Cadastro de Venda", font=("Arial", 18, 
 label_titulo.pack(pady=10)
 
 # Campos do formulário
-entry_produto = ctk.CTkEntry(frame, placeholder_text="Nome do Produto")
-entry_produto.pack(pady=5, padx=10, fill="x")
+produtos_list = SheetHandler().load_products()
+produtos_names = [produto["nome"] for produto in produtos_list] 
+
+combobox_produtos = ctk.CTkComboBox(frame, values=produtos_names, state="readonly")
+combobox_produtos.set("Selecione o produto")
+combobox_produtos.pack(pady=5, padx=10, fill="x")
 
 entry_cliente = ctk.CTkEntry(frame, placeholder_text="Nome do Cliente")
 entry_cliente.pack(pady=5, padx=10, fill="x")
