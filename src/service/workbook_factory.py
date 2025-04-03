@@ -7,7 +7,7 @@ class WorkBookFactory:
     def _gerar_sheet_vendas(self, book: Workbook):
         active_sheet = book.active
         active_sheet.title = "Vendas"
-        active_sheet.append(["Nome do Produto", "Valor", "Nome do Cliente", "Forma de Pagamento", "Data da Venda", "Horário da Venda", "Vendedor"])
+        active_sheet.append(["Nome do Produto", "Valor", "Nome do Cliente", "Forma de Pagamento", "Data da Venda", "Vendedor"])
 
 
     def _gerar_sheet_produtos(self, book: Workbook):

@@ -66,7 +66,14 @@ class VendaController:
         cliente = Cliente(form_data["cliente"])
         vendedor = Vendedor(form_data["vendedor"])
         forma_pagamento = FormaPagamento(form_data["pagamento"])
-        venda = Venda(produto=produto, cliente=cliente, forma_pagamento=forma_pagamento, vendedor=vendedor)
+        data_venda = form_data["data"]
+        venda = Venda(
+            produto=produto, 
+            cliente=cliente, 
+            forma_pagamento=forma_pagamento, 
+            data_venda=data_venda, 
+            vendedor=vendedor
+        )
         self.sheet_handler.registrar_venda(venda)
         
         # Mostra mensagem de sucesso e limpa o formulário
