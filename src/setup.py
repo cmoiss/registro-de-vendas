@@ -13,7 +13,7 @@ executables = [
     Executable(
         script="src/app.py",
         base="Win32GUI" if os.name == "nt" else None,  # Oculta o console no Windows (GUI)
-        # icon="icone.ico"  # Opcional: caminho para um ícone personalizado
+        # icon="icone.ico"  # Opcional: caminho para um ícone personalizado 
         target_name="RegistroDeVendas.exe"
     )
 ]
