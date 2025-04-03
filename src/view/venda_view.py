@@ -1,3 +1,4 @@
+from datetime import datetime
 import customtkinter as ctk
 from tkinter import messagebox
 from model.forma_pagamento_enum import FormaPagamentoEnum
@@ -16,6 +17,25 @@ class VendaView:
         if new_text != current_text:
             self.entry_valor.delete(0, ctk.END)
             self.entry_valor.insert(0, new_text)
+    
+    def _filter_date_input(self, event):
+        """Valida o formato de data DD/MM/AAAA durante a digitação"""
+        current_text = self.entry_data.get()
+        new_text = "".join([c for c in current_text if c.isdigit() or c == "/"])
+        
+        # Limita a 10 caracteres (DD/MM/AAAA)
+        if len(new_text) > 10:
+            new_text = new_text[:10]
+        
+        # Insere as barras automaticamente
+        if len(new_text) == 2 and current_text[-1] != "/":
+            new_text += "/"
+        elif len(new_text) == 5 and current_text[-1] != "/":
+            new_text += "/"
+        
+        if new_text != current_text:
+            self.entry_data.delete(0, ctk.END)
+            self.entry_data.insert(0, new_text)
     
     def __init__(self, root):
         self.root = root
@@ -64,6 +84,13 @@ class VendaView:
         )
         self.combobox_formas_pagamento.set("Selecione a forma de pagamento")
         self.combobox_formas_pagamento.pack(pady=5, padx=10, fill="x")
+        
+        self.entry_data = ctk.CTkEntry(
+            self.frame,
+            placeholder_text="Data (DD/MM/AAAA)"
+        )
+        self.entry_data.pack(pady=5, padx=10, fill="x")
+        self.entry_data.bind("<KeyRelease>", self._filter_date_input)
 
         # Combobox de vendedores
         self.vendedores = ["Carlos", "Josenildo"]
@@ -74,6 +101,7 @@ class VendaView:
         )
         self.combobox_vendedor.set("Selecione o vendedor")
         self.combobox_vendedor.pack(pady=5, padx=10, fill="x")
+
 
         # Botão de cadastro
         self.botao_cadastrar = ctk.CTkButton(
@@ -95,15 +123,20 @@ class VendaView:
     def get_form_data(self):
         try:
             valor = float(self.entry_valor.get()) if self.entry_valor.get() else 0.0
+            # Converte a string de data para objeto date (ou mantém None se vazio)
+            data_text = self.entry_data.get()
+            data = datetime.strptime(data_text, "%d/%m/%Y").date() if data_text else None
         except ValueError:
-            valor = 0.0  # Fallback se houver erro (improvável com a validação)
+            valor = 0.0
+            data = None  # Data inválida será tratada no controller
         
         return {
             "produto": self.combobox_produtos.get(),
             "cliente": self.entry_cliente.get(),
             "valor": valor,
             "pagamento": self.combobox_formas_pagamento.get(),
-            "vendedor": self.combobox_vendedor.get()
+            "vendedor": self.combobox_vendedor.get(),
+            "data": data  # Adicionado aqui
         }
     
     def clear_form(self):
@@ -113,6 +146,7 @@ class VendaView:
         self.entry_valor.delete(0, "end")
         self.combobox_formas_pagamento.set("Selecione a forma de pagamento")
         self.combobox_vendedor.set("Selecione o vendedor")
+        self.entry_data.delete(0, "end")
     
     def show_success_message(self, message):
         """Exibe uma mensagem de sucesso"""
