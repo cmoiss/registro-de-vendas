@@ -16,7 +16,7 @@ class SheetHandler:
             venda.produto.nome,
             venda.produto.preco,
             venda.cliente.name, 
-            None,
+            venda.forma_pagamento.forma,
             None,
             None,
             # venda.data_hora_venda,

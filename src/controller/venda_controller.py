@@ -1,3 +1,5 @@
+from model.forma_pagamento import FormaPagamento
+from model.forma_pagamento_enum import FormaPagamentoEnum
 from model.produto import Produto
 from model.cliente import Cliente
 from model.venda import Venda
@@ -63,7 +65,8 @@ class VendaController:
         produto = Produto(form_data["produto"], form_data["valor"])
         cliente = Cliente(form_data["cliente"])
         vendedor = Vendedor(form_data["vendedor"])
-        venda = Venda(produto=produto, cliente=cliente, forma_pagamento=None, vendedor=vendedor)
+        forma_pagamento = FormaPagamento(form_data["pagamento"])
+        venda = Venda(produto=produto, cliente=cliente, forma_pagamento=forma_pagamento, vendedor=vendedor)
         self.sheet_handler.registrar_venda(venda)
         
         # Mostra mensagem de sucesso e limpa o formulário

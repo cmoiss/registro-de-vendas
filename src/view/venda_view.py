@@ -1,5 +1,6 @@
 import customtkinter as ctk
 from tkinter import messagebox
+from model.forma_pagamento_enum import FormaPagamentoEnum
 
 class VendaView:
     def __init__(self, root):
@@ -37,7 +38,7 @@ class VendaView:
         self.entry_valor.pack(pady=5, padx=10, fill="x")
 
         # Combobox de formas de pagamento
-        self.formas_pagamento = ["Pix", "Cartão de Débito", "Cartão de Crédito", "Espécie"]
+        self.formas_pagamento = [forma.value for forma in FormaPagamentoEnum]
         self.combobox_formas_pagamento = ctk.CTkComboBox(
             self.frame, 
             values=self.formas_pagamento, 
