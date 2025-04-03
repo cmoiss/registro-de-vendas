@@ -3,6 +3,20 @@ from tkinter import messagebox
 from model.forma_pagamento_enum import FormaPagamentoEnum
 
 class VendaView:
+    def _filter_numeric_input(self, event):
+        """Filtra caracteres não numéricos e valida formato decimal."""
+        current_text = self.entry_valor.get()
+        new_text = "".join([c for c in current_text if c.isdigit() or c == "."])  # Permite números e .
+        
+        # Garante apenas um ponto decimal
+        if new_text.count(".") > 1:
+            new_text = new_text.replace(".", "", new_text.count(".") - 1)
+        
+        # Atualiza o texto do Entry (se houve mudança)
+        if new_text != current_text:
+            self.entry_valor.delete(0, ctk.END)
+            self.entry_valor.insert(0, new_text)
+    
     def __init__(self, root):
         self.root = root
         self.controller = None
@@ -33,9 +47,13 @@ class VendaView:
         self.entry_cliente = ctk.CTkEntry(self.frame, placeholder_text="Nome do Cliente")
         self.entry_cliente.pack(pady=5, padx=10, fill="x")
 
-        # Campo de valor
-        self.entry_valor = ctk.CTkEntry(self.frame, placeholder_text="Valor da Venda (R$)")
+        # Campo de valor (com validação via evento KeyRelease)
+        self.entry_valor = ctk.CTkEntry(
+            self.frame,
+            placeholder_text="Valor da Venda (R$)"
+        )
         self.entry_valor.pack(pady=5, padx=10, fill="x")
+        self.entry_valor.bind("<KeyRelease>", self._filter_numeric_input)  # Valida ao digitar
 
         # Combobox de formas de pagamento
         self.formas_pagamento = [forma.value for forma in FormaPagamentoEnum]
@@ -75,11 +93,15 @@ class VendaView:
         self.combobox_produtos.configure(command=callback)
     
     def get_form_data(self):
-        """Retorna os dados do formulário como um dicionário"""
+        try:
+            valor = float(self.entry_valor.get()) if self.entry_valor.get() else 0.0
+        except ValueError:
+            valor = 0.0  # Fallback se houver erro (improvável com a validação)
+        
         return {
             "produto": self.combobox_produtos.get(),
             "cliente": self.entry_cliente.get(),
-            "valor": self.entry_valor.get(),
+            "valor": valor,
             "pagamento": self.combobox_formas_pagamento.get(),
             "vendedor": self.combobox_vendedor.get()
         }
