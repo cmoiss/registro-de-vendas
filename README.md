@@ -8,6 +8,9 @@
 ## 📝 Descrição
 Este é um sistema simples de registro de vendas desenvolvido em Python para um empreendedor no ramo de camisas esportivas. O sistema permite cadastrar vendas de forma intuitiva, armazenando os dados em uma planilha Excel com duas abas: "Vendas" e "Produtos".
 
+![image](https://github.com/user-attachments/assets/81223e5d-c6fc-46ca-b98a-0c2cb9d5967a)
+
+
 ## ✨ Funcionalidades
 - Cadastro de vendas com os seguintes campos:
   - Nome do Produto (combobox alimentado pela lista de produtos)
