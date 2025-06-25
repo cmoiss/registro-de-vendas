@@ -1,2 +1,6 @@
-customtkinter
-openpyxl
+# Use "pip install -r requirements.txt" to install the required packages
+customtkinter==5.2.2
+darkdetect==0.8.0
+et_xmlfile==2.0.0
+openpyxl==3.1.5
+packaging==25.0
